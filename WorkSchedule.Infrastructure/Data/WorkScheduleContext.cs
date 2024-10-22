@@ -16,10 +16,10 @@ public class WorkScheduleContext : DbContext
     {
         
     }
-    DbSet<User> Users { get; set; }
-    DbSet<Preference> Preferences { get; set; }
-    DbSet<WorkDay> WorkDays { get; set; }
-    DbSet<Account> Accounts { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Preference> Preferences { get; set; }
+    public DbSet<WorkDay> WorkDays { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

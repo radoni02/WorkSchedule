@@ -8,13 +8,11 @@ namespace WorkSchedule.Domain.User;
 
 public class Account
 {
-    public Account(Guid id, string email, string password, string refreshToken, DateTime refreshTokenExpTime)
+    public Account(Guid id, string email, string password)
     {
         Id = id;
         Email = email;
         Password = password;
-        RefreshToken = refreshToken;
-        RefreshTokenExpTime = refreshTokenExpTime;
     }
 
     public Guid Id { get; set; }
@@ -22,4 +20,13 @@ public class Account
     public string Password { get; private set; }
     public string RefreshToken { get; private set; }
     public DateTime RefreshTokenExpTime { get; private set; }
+
+    public void SetRefreshToken(string token)
+    {
+        RefreshToken = token;
+    }
+    public void SetRefreshTokenExpTime(DateTime dateTime)
+    {
+        RefreshTokenExpTime = dateTime;
+    }
 }
