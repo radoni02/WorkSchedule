@@ -12,7 +12,7 @@ namespace WorkSchedule.Infrastructure.Data;
 
 public class WorkScheduleContext : DbContext
 {
-    public WorkScheduleContext(DbContextOptions options) : base(options)
+    public WorkScheduleContext(DbContextOptions<WorkScheduleContext> options) : base(options)
     {
         
     }

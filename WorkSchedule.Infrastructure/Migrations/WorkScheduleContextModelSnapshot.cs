@@ -39,7 +39,7 @@ namespace WorkSchedule.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Preferences");
+                    b.ToTable("Preferences", (string)null);
                 });
 
             modelBuilder.Entity("WorkSchedule.Domain.Preference.WorkDay", b =>
@@ -59,7 +59,7 @@ namespace WorkSchedule.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkDays");
+                    b.ToTable("WorkDays", (string)null);
                 });
 
             modelBuilder.Entity("WorkSchedule.Domain.User.Account", b =>
@@ -85,7 +85,7 @@ namespace WorkSchedule.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("WorkSchedule.Domain.User.User", b =>
@@ -112,7 +112,7 @@ namespace WorkSchedule.Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("WorkSchedule.Domain.User.User", b =>
