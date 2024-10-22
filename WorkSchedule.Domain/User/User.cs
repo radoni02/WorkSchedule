@@ -9,6 +9,12 @@ namespace WorkSchedule.Domain.User;
 
 public class User
 {
+    public User()
+    {
+        Account = new(Guid.NewGuid(), string.Empty, string.Empty);
+        Name = string.Empty;
+        Lastname = string.Empty;
+    }
     public User(Guid id, string name, string lastname, AppRole role,Guid accountId ,Account account)
     {
         Id = id;
