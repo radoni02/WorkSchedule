@@ -1,0 +1,9 @@
+services:
+  mysql:
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: TestPass123
+    image: mysql:8.0.40-debian
+    volumes:
+      - db-data:/var/lib/mysql
