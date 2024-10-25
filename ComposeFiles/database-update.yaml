@@ -1,6 +1,6 @@
 include:
   - database.yaml
-  - backend.yaml
+  - backend-db-update.yaml
 volumes:
   workschedule-db-vol:
     driver: local

@@ -1,9 +1,16 @@
 services:
-  mysql:
+  database:
+    container_name: database
     ports:
       - "3309:3306"
     environment:
       MYSQL_ROOT_PASSWORD: TestPass123
     image: mysql:8.0.40-debian
+    networks:
+      - workschedule-network
     volumes:
       - workschedule-db-vol:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
