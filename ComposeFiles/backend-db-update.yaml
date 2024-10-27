@@ -1,0 +1,15 @@
+services:
+  backend-db-update:
+    container_name: backend-db-update
+    depends_on:
+        database:
+            condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Compose
+    build:
+        context: ../.
+        dockerfile: ./WorkSchedule.Api/Database-update
+    networks:
+      - workschedule-network
