@@ -8,8 +8,15 @@ namespace WorkSchedule.Domain.Preference;
 
 public abstract class WorkDayBase
 {
-    public Guid Id { get; private set; }
-    public Guid UserId { get; private set; }
-    public DateTime Start { get; private set; }
-    public DateTime End { get; private set; }
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
+    public WorkDayBase(Guid userId, DateTime start, DateTime end)
+    {
+        Id = Guid.NewGuid();
+        UserId = userId;
+        Start = start;
+        End = end;
+    }
 }
