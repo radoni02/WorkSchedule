@@ -18,11 +18,15 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User> GetUserByEmail(string email)
-        => await _context.Users.FirstOrDefaultAsync(u => u.Account.Email == email);
+    public async Task<User?> GetUserByEmail(string email)
+        => await _context.Users.FirstOrDefaultAsync(u => u.Account.Email.Equals(email));
 
     public async Task AddUser(User user)
         => await _context.Users.AddAsync(user);
+    public async Task DeleteUser(User user) 
+        => await Task.FromResult(_context.Users.Remove(user));
+    public async Task ModifyUser(User user)
+        => await Task.FromResult(_context.Users.Update(user));
 
     public async Task SaveChangesAsync()
     {
