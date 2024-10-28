@@ -8,4 +8,5 @@ namespace WorkSchedule.Domain.Preference;
 
 public class Preference : WorkDayBase
 {
+    public Preference(Guid userId, DateTime start, DateTime end) : base(userId, start, end) { }
 }
