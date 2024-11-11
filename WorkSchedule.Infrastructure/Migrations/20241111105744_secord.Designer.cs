@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkSchedule.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WorkSchedule.Infrastructure.Data;
 namespace WorkSchedule.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkScheduleContext))]
-    partial class WorkScheduleContextModelSnapshot : ModelSnapshot
+    [Migration("20241111105744_secord")]
+    partial class secord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

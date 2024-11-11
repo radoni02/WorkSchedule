@@ -18,8 +18,8 @@ public class Account
     public Guid Id { get; set; }
     public string Email { get; private set; }
     public string Password { get; private set; }
-    public string RefreshToken { get; private set; }
-    public DateTime RefreshTokenExpTime { get; private set; }
+    public string? RefreshToken { get; private set; }
+    public DateTime? RefreshTokenExpTime { get; private set; }
 
     public void SetRefreshToken(string token)
     {

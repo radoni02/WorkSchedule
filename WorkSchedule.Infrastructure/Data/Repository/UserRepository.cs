@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<User?> GetUserByEmail(string email)
-        => await _context.Users.FirstOrDefaultAsync(u => u.Account.Email.Equals(email));
+        => await _context.Users.Include(u => u.Account).FirstOrDefaultAsync(u => u.Account.Email.Equals(email));
 
     public async Task AddUser(User user)
         => await _context.Users.AddAsync(user);

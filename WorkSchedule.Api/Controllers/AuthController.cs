@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
             return BadRequest("Invalid client request");
         }
 
-        var user = await _loginUserService.Handle(new LoginUserService.Request(loginModel.Email, loginModel.Email));
+        var user = await _loginUserService.Handle(new LoginUserService.Request(loginModel.Email, loginModel.Password));
 
         var claims = new List<Claim>
             {
@@ -54,7 +54,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost, Route("rejstacja")]
-    public async Task<IActionResult> Rejstracja([FromForm] UserRegister model)
+    public async Task<IActionResult> Rejstracja([FromBody] UserRegister model)
     {
         if(!model.Password.Equals(model.PasswordConfirmation))
         {
@@ -67,6 +67,7 @@ public class AuthController : ControllerBase
         }
         var accountId = Guid.NewGuid();
         await _userRepo.AddUser(new User(Guid.NewGuid(), model.Name, model.Lastname, model.Rola, accountId, new Account(accountId, model.Email, _passwordHasher.Hash(model.Password))));
+        await _userRepo.SaveChangesAsync();
         var user = await _userRepo.GetUserByEmail(model.Email);
         var claims = new List<Claim>
             {
