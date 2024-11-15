@@ -17,6 +17,7 @@ public static class Extension
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<IRoles, RolesRepository>();
         services.AddTransient<LoginUserService>();
         return services;
     }
