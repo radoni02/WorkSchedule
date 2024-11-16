@@ -3,9 +3,9 @@ using System.Security.Claims;
 using WorkSchedule.Api.Models;
 using WorkSchedule.Application.Interfaces;
 using WorkSchedule.Infrastructure.Token;
-using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.Application.User.Register;
 using WorkSchedule.Domain.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WorkSchedule.Api.Controllers;
 
@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, loginModel.Email),
-                new Claim(ClaimTypes.Role, "Menager")
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
         var accessToken = _tokenService.GenerateAccessToken(claims);
         var refreshToken = _tokenService.GenerateRefreshToken();
@@ -84,5 +84,23 @@ public class AuthController : ControllerBase
             AccessToken = accessToken,
             RefreshToken = refreshToken
         });
+    }
+    /// <summary>
+    /// Retrieves details of the current user
+    /// </summary>
+    /// <returns>UserModel object with user details</returns>
+    [HttpGet("GetUserDetails"), Authorize]
+    public async Task<IActionResult> GetUserDetails()
+    {
+        string? email = User?.Identity?.Name;
+        if (email == null)
+            return BadRequest("User's e-mail data is missing from the token!");
+
+        User? dbUser = await _userRepo.GetUserByEmail(email);
+        if (dbUser == null)
+            return NotFound("User with the given mail not found in the system!");
+
+        UserModel answer = new(dbUser.Name, dbUser.Lastname, dbUser.Role.ToString(), dbUser.Id);
+        return new JsonResult(answer);
     }
 }

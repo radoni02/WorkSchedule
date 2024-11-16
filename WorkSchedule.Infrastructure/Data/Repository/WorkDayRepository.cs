@@ -27,7 +27,7 @@ public class WorkDayRepository : IWorkDayRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredWorkdays = filteredWorkdays.Where(x => userIds.Contains(x.UserId));
         }
-        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredWorkdays.ToListAsync();
     }
@@ -42,7 +42,7 @@ public class WorkDayRepository : IWorkDayRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredWorkdays = filteredWorkdays.Where(x => userIds.Contains(x.UserId));
         }
-        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredWorkdays.ToListAsync();
     }
@@ -66,7 +66,6 @@ public class WorkDayRepository : IWorkDayRepository
             _context.WorkDays.RemoveRange(presentWorkdays);
         }
         await _context.WorkDays.AddAsync(new WorkDay(targetedUser.Id, finalStart, finalEnd));
-        await _context.SaveChangesAsync();
     }
     public async Task TransferUserPreference(DateTime start, DateTime end, Domain.User.User targetedUser)
     {
@@ -74,7 +73,7 @@ public class WorkDayRepository : IWorkDayRepository
             .FirstOrDefaultAsync(x => x.UserId.Equals(targetedUser.Id) && x.Start.Equals(start) && x.End.Equals(end));
         if(foundPreference == null)
         {
-            throw new Exception("Preference with the given dates not found!");
+            throw new Exception(string.Concat("Preference with the given dates not found! (start=", start.ToString(), "|end=", end.ToString(), ")"));
         }
 
         _context.Preferences.Remove(foundPreference);
@@ -92,7 +91,6 @@ public class WorkDayRepository : IWorkDayRepository
             _context.WorkDays.RemoveRange(presentWorkdays);
         }
         await _context.WorkDays.AddAsync(new WorkDay(targetedUser.Id, finalStart, finalEnd));
-        await _context.SaveChangesAsync();
     }
     public async Task ClearUserWorkday(DateOnly day, Domain.User.User targetedUser)
     {
@@ -100,11 +98,10 @@ public class WorkDayRepository : IWorkDayRepository
         DateTime localEnd = day.ToDateTime(TimeOnly.MaxValue);
 
         List<WorkDay> foundWorkdays = await _context.WorkDays
-            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0)
+            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0)
             .ToListAsync();
 
         _context.WorkDays.RemoveRange(foundWorkdays);
-        await _context.SaveChangesAsync();
     }
     public async Task SaveChangesAsync()
     {
