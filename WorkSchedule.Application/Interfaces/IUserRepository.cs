@@ -9,6 +9,8 @@ namespace WorkSchedule.Application.Interfaces;
 public interface IUserRepository
 {
     Task<WorkSchedule.Domain.User.User?> GetUserByEmail(string email);
+    Task<WorkSchedule.Domain.User.User?> GetUserById(Guid id);
+    Task<IList<Domain.User.User>> GetAllUsers();
     Task SaveChangesAsync();
     Task AddUser(WorkSchedule.Domain.User.User user);
     Task DeleteUser(WorkSchedule.Domain.User.User user);

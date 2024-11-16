@@ -33,12 +33,26 @@ namespace WorkSchedule.Api.Controllers
         [HttpGet("ListRoles")]
         public async Task<IActionResult> ListRoles() => new JsonResult(await _roles.GetAllRoles());
         /// <summary>
+        /// Retrieves list of users in the system
+        /// </summary>
+        /// <returns>List of UserModel objects</returns>
+        [HttpGet("ListUsers"), Authorize(Roles = "Admin,SuperAdmin")]
+        public async Task<IActionResult> ListUsers()
+        {
+            List<UserModel> answer = new();
+            IList<User> dbUsers = await _userRepo.GetAllUsers();
+            foreach(var user in dbUsers)
+            {
+                answer.Add(new(user.Name, user.Lastname, user.Role.ToString(), user.Id));
+            }
+            return new JsonResult(answer);
+        }
+        /// <summary>
         /// Modifies user data
         /// </summary>
-        /// <param name="targetedUserEmail">(optional) Email of other user</param>
         /// <param name="newUserData">Data of the new user</param>
         [HttpPut("ModifyUser"), Authorize]
-        public async Task<IActionResult> ModifyUser([FromQuery] string? targetedUserEmail, [FromBody] UserModel newUserData)
+        public async Task<IActionResult> ModifyUser([FromBody] UserModel newUserData)
         {
             string? email = User?.Identity?.Name;
             if (email == null)
@@ -49,12 +63,12 @@ namespace WorkSchedule.Api.Controllers
             if (dbUser == null)
                 return NotFound("User with the given token mail not found in the system!");
 
-            if (!string.IsNullOrWhiteSpace(targetedUserEmail))
+            if (!dbUser.Id.Equals(newUserData.Id))
             {
                 if (User != null && (!User.IsInRole(AppRole.SuperAdmin.ToString()) && !User.IsInRole(AppRole.Admin.ToString())))
                     return BadRequest("Regular user cannot modify other users!");
 
-                User? targetedDbUser = await _userRepo.GetUserByEmail(targetedUserEmail);
+                User? targetedDbUser = await _userRepo.GetUserById(newUserData.Id);
                 if (targetedDbUser == null)
                     return NotFound("User requested for the change not found in the system!");
                 targetedDbUser = new(targetedDbUser.Id, newUserData.Name, newUserData.Lastname, parsedRole, targetedDbUser.AccountId, targetedDbUser.Account);
@@ -75,16 +89,18 @@ namespace WorkSchedule.Api.Controllers
         /// <summary>
         /// Deletes targeted user account
         /// </summary>
-        /// <param name="targetEmail">E-mail of the targeted user</param>
-        [HttpDelete("DeleteUser/{targetEmail}"), Authorize(Roles = "Admin,SuperAdmin")]
-        public async Task<IActionResult> DeleteUser(string targetEmail)
+        /// <param name="targetUserId">Id of the targeted user</param>
+        [HttpDelete("DeleteUser/{targetUserId}"), Authorize(Roles = "Admin,SuperAdmin")]
+        public async Task<IActionResult> DeleteUser(string targetUserId)
         {
-            if (targetEmail.Equals(User?.Identity?.Name))
-                return BadRequest("User cannot delete it's own account!");
 
-            User? dbUser = await _userRepo.GetUserByEmail(targetEmail);
-            if (dbUser == null) 
+            User? dbUser = await _userRepo.GetUserById(Guid.Parse(targetUserId));
+            if (dbUser == null)
                 return NotFound("User for deletion not found!");
+
+            User? ownUser = await _userRepo.GetUserByEmail(User?.Identity?.Name ?? string.Empty);
+            if (dbUser.Id.Equals(ownUser?.Id))
+                return BadRequest("User cannot delete it's own account!");
 
             await _userRepo.DeleteUser(dbUser);
             await _userRepo.SaveChangesAsync();

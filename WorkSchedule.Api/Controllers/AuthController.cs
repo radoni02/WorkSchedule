@@ -3,7 +3,6 @@ using System.Security.Claims;
 using WorkSchedule.Api.Models;
 using WorkSchedule.Application.Interfaces;
 using WorkSchedule.Infrastructure.Token;
-using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.Application.User.Register;
 using WorkSchedule.Domain.User;
 using Microsoft.AspNetCore.Authorization;
@@ -101,7 +100,7 @@ public class AuthController : ControllerBase
         if (dbUser == null)
             return NotFound("User with the given mail not found in the system!");
 
-        UserModel answer = new(dbUser.Name, dbUser.Lastname, dbUser.Role.ToString());
+        UserModel answer = new(dbUser.Name, dbUser.Lastname, dbUser.Role.ToString(), dbUser.Id);
         return new JsonResult(answer);
     }
 }
