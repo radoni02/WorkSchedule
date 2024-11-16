@@ -4,20 +4,20 @@
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Email { get; set; }
+        public Guid UserId { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public WorkDayBaseModel()
         {
             Name = string.Empty;
             Surname = string.Empty;
-            Email = string.Empty;
+            UserId = Guid.Empty;
         }
-        public WorkDayBaseModel(string name, string surname, string email, DateTime start, DateTime end)
+        public WorkDayBaseModel(string name, string surname, Guid ID, DateTime start, DateTime end)
         {
             Name = name;
             Surname = surname;
-            Email = email;
+            UserId = ID;
             Start = start;
             End = end;
         }

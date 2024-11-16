@@ -19,6 +19,8 @@ public static class Extension
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IRoles, RolesRepository>();
         services.AddTransient<LoginUserService>();
+        services.AddTransient<IPreferenceRepository, PreferenceRepository>();
+        services.AddTransient<IWorkDayRepository, WorkDayRepository>();
         return services;
     }
 }

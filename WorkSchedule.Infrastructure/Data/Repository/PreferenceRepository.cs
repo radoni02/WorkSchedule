@@ -27,7 +27,7 @@ public class PreferenceRepository : IPreferenceRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredPreferences = filteredPreferences.Where(x => userIds.Contains(x.UserId));
         }
-        filteredPreferences = filteredPreferences.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredPreferences = filteredPreferences.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredPreferences.ToListAsync();
     }
@@ -42,7 +42,7 @@ public class PreferenceRepository : IPreferenceRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredPreferences = filteredPreferences.Where(x => userIds.Contains(x.UserId));
         }
-        filteredPreferences = filteredPreferences.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredPreferences = filteredPreferences.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredPreferences.ToListAsync();
     }
@@ -74,7 +74,7 @@ public class PreferenceRepository : IPreferenceRepository
         DateTime localEnd = day.ToDateTime(TimeOnly.MaxValue);
 
         List<Preference> foundPreferences = await _context.Preferences
-            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0)
+            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0)
             .ToListAsync();
 
         _context.Preferences.RemoveRange(foundPreferences);
