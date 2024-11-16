@@ -3,6 +3,6 @@
     public class WorkDayModel : WorkDayBaseModel
     {
         public WorkDayModel() : base() { }
-        public WorkDayModel(string name, string surname, string email, DateTime start, DateTime end) : base(name, surname, email, start, end) { }
+        public WorkDayModel(string name, string surname, Guid Id, DateTime start, DateTime end) : base(name, surname, Id, start, end) { }
     }
 }

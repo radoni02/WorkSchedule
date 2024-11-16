@@ -27,7 +27,7 @@ public class WorkDayRepository : IWorkDayRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredWorkdays = filteredWorkdays.Where(x => userIds.Contains(x.UserId));
         }
-        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredWorkdays.ToListAsync();
     }
@@ -42,7 +42,7 @@ public class WorkDayRepository : IWorkDayRepository
             List<Guid> userIds = targetedUsers.Select(user => user.Id).ToList();
             filteredWorkdays = filteredWorkdays.Where(x => userIds.Contains(x.UserId));
         }
-        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0);
+        filteredWorkdays = filteredWorkdays.Where(x => localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0);
 
         return await filteredWorkdays.ToListAsync();
     }
@@ -100,7 +100,7 @@ public class WorkDayRepository : IWorkDayRepository
         DateTime localEnd = day.ToDateTime(TimeOnly.MaxValue);
 
         List<WorkDay> foundWorkdays = await _context.WorkDays
-            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) >= 0 && localEnd.CompareTo(x.End) <= 0)
+            .Where(x => x.UserId.Equals(targetedUser.Id) && localStart.CompareTo(x.Start) <= 0 && localEnd.CompareTo(x.End) >= 0)
             .ToListAsync();
 
         _context.WorkDays.RemoveRange(foundWorkdays);
