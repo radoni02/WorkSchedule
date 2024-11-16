@@ -66,7 +66,6 @@ public class PreferenceRepository : IPreferenceRepository
             _context.Preferences.RemoveRange(presentPreferences);
         }
         await _context.Preferences.AddAsync(new Preference(targetedUser.Id, finalStart, finalEnd));
-        await _context.SaveChangesAsync();
     }
     public async Task ClearUserPreference(DateOnly day, Domain.User.User targetedUser)
     {
@@ -78,7 +77,6 @@ public class PreferenceRepository : IPreferenceRepository
             .ToListAsync();
 
         _context.Preferences.RemoveRange(foundPreferences);
-        await _context.SaveChangesAsync();
     }
     public async Task SaveChangesAsync()
     {
