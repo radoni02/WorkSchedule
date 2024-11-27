@@ -6,6 +6,7 @@ using WorkSchedule.Infrastructure.Token;
 using WorkSchedule.Application.User.Register;
 using WorkSchedule.Domain.User;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace WorkSchedule.Api.Controllers;
 

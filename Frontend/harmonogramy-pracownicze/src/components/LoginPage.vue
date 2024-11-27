@@ -34,6 +34,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
   name: 'LoginPage',
@@ -42,6 +43,8 @@ export default {
 
     const email = ref('');
     const password = ref('');
+
+    const store = useStore();
 
     const handleSubmit = async () => {
       if (!email.value || !password.value) {
@@ -68,23 +71,31 @@ export default {
           const loginData = await loginResponse.json();
           console.log('Login successful:', loginData);
 
-          const userInfoResponse = await fetch('http://localhost:8080/api/Auth/GetUserInfo', {
+          const tok = loginData.accessToken;
+          store.commit('setAccessToken', tok);
+
+          const userInfoResponse = await fetch('http://localhost:8080/api/Auth/GetUserDetails', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${loginData.token}`,
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${tok}`, // Include the access token
             },
           });
 
           if (userInfoResponse.ok) {
             const userInfo = await userInfoResponse.json();
             console.log('User Info retrieved:', userInfo);
-            this.$store.dispatch('updateUser', userInfo);
+            store.dispatch('updateUser', userInfo);
 
-            if (userInfo.role === 'admin') {
+            if (userInfo.role === 'Admin') {
+              // router.push({ name: 'EmployeePreferencesManager' });
+              router.push({ name: 'ManageUsers' });
+            } else if (userInfo.role === 'SuperAdmin') {
+              // router.push({ name: 'ManageUsers' });
               router.push({ name: 'EmployeePreferencesManager' });
-            } else if (userInfo.role === 'employee') {
-              router.push({ name: 'EmployeePreferencesView' });
-            } else if (userInfo.role === 'viewer') {
+            } else if (userInfo.role === 'Worker') {
+              router.push({ name: 'PreferencesSubmitPage' });
+            } else if (userInfo.role === 'Spectator') {
               router.push({ name: 'PreferencesViewPage' });
             }
           } else {

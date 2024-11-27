@@ -24,9 +24,9 @@
         </thead>
         <tbody>
           <tr v-for="preference in employeePreferences" :key="preference.employeeId">
-            <td>{{ preference.employeeName }}</td>
-            <td>{{ preference.startTime }}</td>
-            <td>{{ preference.endTime }}</td>
+            <td>{{ preference.name }}</td>
+            <td>{{ preference.start }}</td>
+            <td>{{ preference.end }}</td>
           </tr>
         </tbody>
       </table>
@@ -38,39 +38,42 @@
 
 <script>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'PreferencesViewPage',
-  computed: {
-    user() {
-      return this.$store.getters.getUser;
-    },
-  },
   setup() {
+    const store = useStore();  // Accessing the store with useStore() in setup
     const selectedDate = ref('');
     const employeePreferences = ref([]);
     const loading = ref(false);
 
+    // Method to fetch preferences based on the selected date
     const loadPreferencesForDate = async () => {
       if (!selectedDate.value) return;
 
       loading.value = true;
 
       try {
-        // API request to get preferences
-        const response = await fetch(
-          `http://localhost:8080/api/Preferences/GetPreferences/${selectedDate.value}&userID=${this.user().userID}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        // Build the URL with the selected date, optional 'end' date, and user ID
+        let url = `http://localhost:8080/api/Preferences/GetPreferences/${selectedDate.value}`;
+        
+        // Access user info from the store
+        //const user = store.getters.getUser;  // Get current user from Vuex store
+
+        // API request with query parameters
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.getters.getAccessToken}`, // Use token from Vuex store
+          },
+          //body: JSON.stringify({userID: user.id})
+        });
 
         if (response.ok) {
           const data = await response.json();
-          employeePreferences.value = data; 
+          employeePreferences.value = data;  // Set preferences data to the employeePreferences ref
         } else {
           console.error('Error fetching preferences:', await response.text());
           alert('Error fetching preferences.');
@@ -93,7 +96,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .preferences-view-page {
   max-width: 800px;
   margin: 0 auto;

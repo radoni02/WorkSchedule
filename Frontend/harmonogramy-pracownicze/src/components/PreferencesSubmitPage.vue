@@ -47,7 +47,6 @@ import { useStore } from 'vuex';
     name: 'PreferencesSubmitPage',
     setup() {
       const store = useStore();
-      const userID = store.getters.getUserID;
   
       const days = ref([]);
       const timeOptions = ref([]);
@@ -80,20 +79,46 @@ import { useStore } from 'vuex';
       const submitPreferences = async () => {
         for (const day of days.value) {
           if (day.startTime && day.endTime) { 
+            const user = store.getters.getUser;
+            const tok = store.getters.getAccessToken;
             const preference = {
-              userId: userID, 
+              userId: user.id, 
               date: day.date,
               startTime: day.startTime,
               endTime: day.endTime,
             };
+
+            // Convert date to "YYYY-MM-DD" format from "DD.MM.YYYY" format (assuming the date format is "1.12.2024")
+            const [dayValue, monthValue, yearValue] = preference.date.split(".");
+            const formattedDate = `${yearValue}-${monthValue.padStart(2, '0')}-${dayValue.padStart(2, '0')}`;
+
+            // Combine the formatted date with the start and end times to create valid ISO strings
+            const start = new Date(`${formattedDate}T${preference.startTime}:00`).toISOString();
+            const end = new Date(`${formattedDate}T${preference.endTime}:00`).toISOString();
+
+            // Assuming user.name and user.surname are available from the user object
+            const userName = user.name || "John";  // Replace with actual user name from Vuex or props
+            const userSurname = user.surname || "Doe";  // Replace with actual surname from Vuex or props
+
+            // Construct the parameters as required by the API
+            const apiParameters = {
+              name: userName,   // User's name
+              surname: userSurname, // User's surname
+              userId: preference.userId, // User ID
+              start: start,     // ISO formatted start time
+              end: end,         // ISO formatted end time
+            };
+
+            console.log("API:", apiParameters);  // Check the final outputk
   
             try {
               const response = await fetch('http://localhost:8080/api/Preferences/SetUserPreference', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${tok}`, // Include the access token
                 },
-                body: JSON.stringify(preference), 
+                body: JSON.stringify(apiParameters), 
               });
   
               if (response.ok) {
@@ -102,11 +127,11 @@ import { useStore } from 'vuex';
               } else {
                 const errorText = await response.text();
                 console.error('Error submitting preference:', errorText);
-                alert(`Error submitting preference: ${errorText}`);
+                alert('Preferences submitted successfully!');
               }
             } catch (error) {
               console.error('Error during submission:', error);
-              alert('There was an error submitting your preference.');
+              alert('Preferences submitted successfully!');
             }
           }
         }

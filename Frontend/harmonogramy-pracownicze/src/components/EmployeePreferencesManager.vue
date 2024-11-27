@@ -97,7 +97,6 @@ export default {
     data() {
         return {
             selectedDate: '',
-            employeePreferences: [],
             isEditing: false,
             preferenceForm: {
                 employeeName: '',
@@ -105,6 +104,20 @@ export default {
                 endTime: '',
                 employeeId: null,
             },
+            employeePreferences: [
+                // Pre-populating with mock data for December
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Alice', startTime: '08:00', endTime: '16:00', confirmed: false, date: '2024-12-01' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Bob', startTime: '09:00', endTime: '17:00', confirmed: false, date: '2024-12-02' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Charlie', startTime: '08:30', endTime: '16:30', confirmed: false, date: '2024-12-03' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Alice', startTime: '10:00', endTime: '18:00', confirmed: false, date: '2024-12-04' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Bob', startTime: '08:00', endTime: '16:00', confirmed: false, date: '2024-12-05' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Charlie', startTime: '09:00', endTime: '17:00', confirmed: false, date: '2024-12-06' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Alice', startTime: '08:00', endTime: '16:00', confirmed: false, date: '2024-12-07' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Bob', startTime: '09:00', endTime: '17:00', confirmed: false, date: '2024-12-08' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Charlie', startTime: '08:30', endTime: '16:30', confirmed: false, date: '2024-12-09' },
+                { employeeId: 'f7bb9991-f4d0-4c61-a365-66698621243e', employeeName: 'Alice', startTime: '10:00', endTime: '18:00', confirmed: false, date: '2024-12-10' },
+                // Add more days in December as needed
+            ],
         };
     },
     methods: {

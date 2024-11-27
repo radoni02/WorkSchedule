@@ -65,4 +65,8 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router);
 app.use(store)
+
+app.config.globalProperties.$user = null;
+app.config.globalProperties.$accessToken = null;
+
 app.mount('#app')

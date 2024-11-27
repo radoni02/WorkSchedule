@@ -83,7 +83,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || "Compose".Equals(app.Environment.EnvironmentName))
@@ -92,8 +104,14 @@ if (app.Environment.IsDevelopment() || "Compose".Equals(app.Environment.Environm
     app.UseSwaggerUI();
 }
 
+
+app.UseCors();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+
+
