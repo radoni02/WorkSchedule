@@ -1,47 +1,66 @@
 <template>
-    <div class="manage-users-page container mt-4">
-        <h2 class="text-center mb-4">Manage Users</h2>
+  <div class="manage-users-page container mt-4">
+    <h2 class="text-center mb-4">Manage Users</h2>
 
-        <!-- User List Table -->
-        <div v-if="users.length > 0">
-            <h3 class="mb-3">Users List</h3>
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Last Name</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="user in users" :key="user.id">
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.lastname }}</td>
-                        <td>{{ user.role}}</td>
-                        <!-- <td>
-                            <select v-model="user.selectedRole" @change="updateUserRole(user)" class="form-control">
-                                <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
-                            </select>
-                        </td> -->
-                        <td>
-                            <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <p v-else class="text-center">No users found.</p>
+    <!-- User List Table -->
+    <div v-if="users.length > 0">
+      <h3 class="mb-3">Users List</h3>
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Last Name</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user in users" :key="user.id">
+          <td>{{ user.name }}</td>
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+
+    <p v-else class="text-center">No users found.</p>
+  </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            users: [], // Will store the list of users fetched from the API
+            users: [
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621243s', name: 'Admin', lastname: 'Test', role: 'SuperAdmin' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621244a', name: 'Piotr', lastname: 'Jagła', role: 'Admin' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621245a', name: 'Jan', lastname: 'Paweł', role: 'Admin' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621246a', name: 'Jr', lastname: 'Tolkien', role: 'Admin' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621247e', name: 'Marcin', lastname: 'King', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621248e', name: 'Jan', lastname: 'Keys', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621249e', name: 'Alice', lastname: 'Keys', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621250e', name: 'Mamo', lastname: 'Zedong', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621251e', name: 'Coconut', lastname: 'Channel', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621252e', name: 'The', lastname: 'Beatle', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621253e', name: 'Piotro', lastname: 'Picasso', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621254e', name: 'Michał', lastname: 'Jordan', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621255e', name: 'Brat', lastname: 'Wright', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621256e', name: 'Księżna', lastname: 'Diana', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621257e', name: 'Isaac', lastname: 'Oldton', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621258e', name: 'Daria', lastname: 'Skłodowska-Curie', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621259e', name: 'Nikola', lastname: 'Kopernik', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621260e', name: 'Johann', lastname: 'Schlechtenberg', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621261e', name: 'Julian', lastname: 'Cezar', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621262e', name: 'Albert', lastname: 'Einkamień', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621263e', name: 'Grota', lastname: 'Thunberg', role: 'Worker' },
+
+            ], // Will store the list of users fetched from the API
             roles: [], // Will store the list of roles fetched from the API
         };
     },
@@ -91,26 +110,31 @@ export default {
             }
         },
 
-        // Method to delete a user based on their user ID
-        async deleteUser(userId) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/User/DeleteUser/${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`, // Include token in the headers
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to delete user');
-                }
-
-                // Remove the deleted user from the list
-                this.users = this.users.filter(user => user.id !== userId);
-            } catch (error) {
-                console.error('Error deleting user:', error);
-            }
+        deleteUser(userId) {
+          // Find the user to be deleted and remove it from the list
+          this.users = this.users.filter(user => user.id !== userId);
         },
+
+        // Method to delete a user based on their user ID
+        // async deleteUser(userId) {
+        //     try {
+        //         const response = await fetch(`http://localhost:8080/api/User/DeleteUser/${userId}`, {
+        //             method: 'DELETE',
+        //             headers: {
+        //                 'Authorization': `Bearer ${this.accessToken}`, // Include token in the headers
+        //             },
+        //         });
+        //
+        //         if (!response.ok) {
+        //             throw new Error('Failed to delete user');
+        //         }
+        //
+        //         // Remove the deleted user from the list
+        //         this.users = this.users.filter(user => user.id !== userId);
+        //     } catch (error) {
+        //         console.error('Error deleting user:', error);
+        //     }
+        // },
 
         // Method to update the role of a user
         async updateUserRole(user) {
