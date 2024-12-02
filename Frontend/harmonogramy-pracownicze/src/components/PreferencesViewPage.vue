@@ -1,38 +1,41 @@
 <template>
-  <div class="preferences-view-page container mt-4">
-    <h2 class="text-center mb-4">View Employee Preferences</h2>
+  <div class="preferences-view-page container mt-5 p-4 shadow rounded">
+    <h2 class="text-center mb-4 custom-header">Employee Preferences Overview</h2>
 
-    <div class="mb-4">
-      <label for="selectedDate" class="form-label">Select Date:</label>
+    <div class="date-picker mb-4">
+      <div class="icons mb-3">
+        <i class="fa-solid fa-calendar-days"></i>
+        <label for="selectedDate" class="form-label fw-bold">Choose a Date:</label>
+      </div>
       <input
         type="date"
         v-model="selectedDate"
         @change="loadPreferencesForDate"
-        class="form-control"
+        class="form-control border-primary"
       />
     </div>
 
-    <div v-if="selectedDate && employeePreferences.length > 0">
-      <h3 class="mb-3">Employee Preferences</h3>
-      <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-          <tr>
-            <th>Employee</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-          </tr>
+    <div v-if="selectedDate && employeePreferences.length > 0" class="preferences-table">
+      <h3 class="mb-4 text-secondary">Preferences Details</h3>
+      <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark text-center">
+        <tr>
+          <th>Employee</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="preference in employeePreferences" :key="preference.employeeId">
-            <td>{{ preference.name }}</td>
-            <td>{{ preference.start }}</td>
-            <td>{{ preference.end }}</td>
-          </tr>
+        <tr v-for="preference in employeePreferences" :key="preference.employeeId" class="text-center">
+          <td>{{ preference.name }}</td>
+          <td>{{ preference.start }}</td>
+          <td>{{ preference.end }}</td>
+        </tr>
         </tbody>
       </table>
     </div>
 
-    <p v-else-if="selectedDate" class="text-center">No preferences submitted for this date.</p>
+    <p v-else-if="selectedDate" class="text-center text-muted fs-5">No preferences submitted for this date.</p>
   </div>
 </template>
 
@@ -57,7 +60,7 @@ export default {
       try {
         // Build the URL with the selected date, optional 'end' date, and user ID
         let url = `http://localhost:8080/api/Preferences/GetPreferences/${selectedDate.value}`;
-        
+
         // Access user info from the store
         //const user = store.getters.getUser;  // Get current user from Vuex store
 
@@ -98,50 +101,39 @@ export default {
 
 <style scoped>
 .preferences-view-page {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  text-align: center;
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.date-picker label {
+  font-weight: bold;
+}
+
+.table {
   margin-top: 20px;
 }
 
-table,
-th,
-td {
-  border: 1px solid #ddd;
-}
-
-th,
-td {
-  padding: 8px;
+.table th,
+.table td {
   text-align: center;
+  padding: 10px;
 }
 
-button {
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
+.table-bordered {
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.preference-form {
-  margin-top: 20px;
-  text-align: left;
+.text-muted {
+  font-style: italic;
+  color: rgb(128, 128, 128);
 }
 
-.preference-form label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.preference-form input {
-  margin-bottom: 10px;
-}
-
-.preference-form button {
-  margin-top: 10px;
+h2 {
+  font-weight: bold;
 }
 </style>

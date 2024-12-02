@@ -1,95 +1,121 @@
 <template>
-  <div class="register-page container mt-5">
-    <h2 class="text-center mb-4">Register</h2>
+  <div class="register-page container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4">
+      <h2 class="text-center mb-4 custom-header">Create an Account</h2>
+      <p class="text-center text-muted mb-4">Join us today and explore the platform</p>
 
-    <div class="mb-3">
-      <label for="firstName" class="form-label">First Name:</label>
-      <input
-        type="text"
-        id="firstName"
-        v-model="firstName"
-        placeholder="Enter your first name"
-        class="form-control"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="lastName" class="form-label">Last Name:</label>
-      <input
-        type="text"
-        id="lastName"
-        v-model="lastName"
-        placeholder="Enter your last name"
-        class="form-control"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input
-        type="email"
-        id="email"
-        v-model="email"
-        placeholder="Enter your email"
-        class="form-control"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
-      <input
-        type="password"
-        id="password"
-        v-model="password"
-        placeholder="Enter your password"
-        class="form-control"
-      />
-    </div>
-
-    <h3 class="mb-3">Select Your Role:</h3>
-
-    <div class="mb-3">
-      <div class="form-check">
-        <input
-          type="radio"
-          id="admin"
-          name="role"
-          value="admin"
-          v-model="selectedRole"
-          class="form-check-input"
-        />
-        <label for="admin" class="form-check-label">Admin</label>
+      <div class="mb-3">
+        <div class="icons mb-3">
+          <i class="fa-solid fa-user"></i>
+          <label for="firstName" class="form-label">First Name:</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="firstName"
+            v-model="firstName"
+            placeholder="Enter your first name"
+            class="form-control"
+          />
+        </div>
       </div>
-      <div class="form-check">
-        <input
-          type="radio"
-          id="employee"
-          name="role"
-          value="employee"
-          v-model="selectedRole"
-          class="form-check-input"
-        />
-        <label for="employee" class="form-check-label">Employee</label>
-      </div>
-      <div class="form-check">
-        <input
-          type="radio"
-          id="viewer"
-          name="role"
-          value="viewer"
-          v-model="selectedRole"
-          class="form-check-input"
-        />
-        <label for="viewer" class="form-check-label">Viewer</label>
-      </div>
-    </div>
 
-    <div class="text-center">
-      <button @click="handleRegister" class="btn btn-primary">Register</button>
+      <div class="mb-3">
+        <div class="icons mb-3">
+          <i class="fa-solid fa-user"></i>
+          <label for="lastName" class="form-label">Last Name:</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="lastName"
+            v-model="lastName"
+            placeholder="Enter your last name"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="icons mb-3">
+          <i class="fa-solid fa-envelope"></i>
+          <label for="email" class="form-label">Email:</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            placeholder="Enter your email"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="icons mb-3">
+          <i class="fa-solid fa-lock"></i>
+          <label for="password" class="form-label">Password:</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            placeholder="Enter your password"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <h5 class="text-center mb-3 custom-header">Select Your Role:</h5>
+      <div class="ml-4 mb-3">
+        <div class="form-check">
+          <input
+            type="radio"
+            id="admin"
+            name="role"
+            value="admin"
+            v-model="selectedRole"
+            class="form-check-input"
+          />
+          <label for="admin" class="form-check-label">Admin</label>
+        </div>
+        <div class="form-check">
+          <input
+            type="radio"
+            id="employee"
+            name="role"
+            value="employee"
+            v-model="selectedRole"
+            class="form-check-input"
+          />
+          <label for="employee" class="form-check-label">Employee</label>
+        </div>
+        <div class="form-check">
+          <input
+            type="radio"
+            id="viewer"
+            name="role"
+            value="viewer"
+            v-model="selectedRole"
+            class="form-check-input"
+          />
+          <label for="viewer" class="form-check-label">Viewer</label>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button @click="handleRegister" class="register-button btn btn-primary w-100">Register</button>
+      </div>
+
+      <p class="text-center text-muted mt-4">
+        Already have an account?
+        <a href="#" class="login-link text-decoration-none">Log in here</a>
+      </p>
     </div>
   </div>
 </template>
-
 
 <script>
 import { ref } from 'vue';
@@ -100,7 +126,7 @@ export default {
     name: 'RegisterPage',
     setup() {
         const router = useRouter();
-        
+
         const firstName = ref('');
         const lastName = ref('');
         const email = ref('');
@@ -200,31 +226,97 @@ export default {
 };
 </script>
 
-
 <style>
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url('/main.jpg') no-repeat center center;
+  background-size: cover;
+  font-family: 'Roboto', sans-serif;
+}
+
 .register-page {
-    max-width: 300px;
-    margin: 0 auto;
-    text-align: left;
+  max-width: 450px;
 }
 
-label {
-    display: block;
-    margin: 10px 0;
-    cursor: pointer;
+.card {
+  width: 450px;
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
+input {
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+input:focus {
+  outline: none;
+  box-shadow: inset 0 0 5px #776212;
+}
+
+.register-button {
+  background-color: #776212;
+  color: white;
+  border: none;
+}
+
+.register-button:hover {
+  background-color: #493c0c;
+  color: white;
+}
+
+.login-link {
+  color: #776212;
+}
+
+.login-link:hover {
+  color: #493c0c;
+  text-decoration: underline;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #493c0c;
+  color: #fff;
+}
+
+.custom-header {
+  color: #776212;
+  font-weight: bold;
+}
+
+a {
+  font-size: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icons i {
+  font-size: 18px;
+  color: #776212;
+}
+
+.icons label {
+  margin: 0;
 }
 </style>

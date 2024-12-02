@@ -1,92 +1,117 @@
 <template>
-    <div class="employee-preferences-manager container mt-4">
-        <h2 class="text-center mb-4">Employee Preferences for Selected Day</h2>
+  <div class="employee-preferences-manager container mt-5 p-4 bg-light shadow rounded">
+    <h2 class="text-center mb-4 custom-header">Employee Preferences Manager</h2>
 
-        <div class="mb-4">
-            <label for="selectedDate" class="form-label">Select Date:</label>
-            <input type="date" v-model="selectedDate" @change="loadPreferencesForDate" class="form-control" />
-        </div>
-
-        <div v-if="selectedDate && employeePreferences.length > 0">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Employee</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Confirm</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="preference in employeePreferences" :key="preference.employeeId">
-                        <td>{{ preference.employeeName }}</td>
-                        <td>{{ preference.startTime }}</td>
-                        <td>{{ preference.endTime }}</td>
-                        <td>
-                            <button :class="[ 
-                                'btn', 
-                                preference.confirmed ? 'btn-success' : 'btn-warning', 
-                                'btn-sm' 
-                            ]" @click="toggleConfirmation(preference.employeeId)">
-                                {{ preference.confirmed ? 'Confirmed' : 'Confirm' }}
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-info btn-sm" @click="editPreference(preference)">
-                                Edit
-                            </button>
-                            <button class="btn btn-danger btn-sm" @click="clearWorkday(preference.employeeId)">
-                                Clear
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <p v-else-if="selectedDate" class="text-center">No preferences submitted for this date.</p>
-
-        <div class="preference-form mt-4">
-            <h3>{{ isEditing ? 'Edit' : 'Create' }} Preference</h3>
-            <form @submit.prevent="savePreference" class="mt-3">
-                <div class="mb-3">
-                    <label for="employeeName" class="form-label">Employee:</label>
-                    <input type="text" v-model="preferenceForm.employeeName" required class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="startTime" class="form-label">Start Time:</label>
-                    <input type="time" v-model="preferenceForm.startTime" required class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="endTime" class="form-label">End Time:</label>
-                    <input type="time" v-model="preferenceForm.endTime" required class="form-control" />
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">
-                        {{ isEditing ? 'Save Changes' : 'Create Preference' }}
-                    </button>
-                    <button type="button" @click="cancelEdit" class="btn btn-secondary">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="mt-4 text-center">
-            <button @click="submitConfirmations" :disabled="!selectedDate" class="btn btn-success">
-                Submit Confirmations
-            </button>
-        </div>
-        <div class="mt-4 text-center">
-            <button @click="manageUsers" class="btn btn-success">
-                ManageUsers
-            </button>
-        </div>
+    <!-- Select Date -->
+    <div class="mb-4">
+      <div class="icons mb-3">
+        <i class="fa-solid fa-calendar-days"></i>
+        <label for="selectedDate" class="form-label fw-bold">Select Date:</label>
+      </div>
+      <input type="date" v-model="selectedDate" @change="loadPreferencesForDate" class="form-control shadow-sm" />
     </div>
+
+    <!-- Table of Preferences -->
+    <div v-if="selectedDate && employeePreferences.length > 0">
+      <div class="card shadow">
+        <div class="card-header bg-gold text-white fw-bold">
+          Preferences for {{ selectedDate }}
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+            <tr>
+              <th>Employee</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Confirm</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="preference in employeePreferences" :key="preference.employeeId">
+              <td>{{ preference.employeeName }}</td>
+              <td>{{ preference.startTime }}</td>
+              <td>{{ preference.endTime }}</td>
+              <td>
+                <button
+                  :class="[
+                                            'btn',
+                                            preference.confirmed ? 'btn-success' : 'btn-light',
+                                            'btn-sm'
+                                        ]"
+                  @click="toggleConfirmation(preference.employeeId)"
+                >
+                  <i class="fas" :class="preference.confirmed ? 'fa-check-circle' : 'fa-circle'"></i>
+                  {{ preference.confirmed ? 'Confirmed' : 'Confirm' }}
+                </button>
+              </td>
+              <td>
+                <button class="btn bg-gold btn-sm me-2" @click="editPreference(preference)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger btn-sm" @click="clearWorkday(preference.employeeId)">
+                  <i class="fas fa-trash-alt"></i> Clear
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p v-else-if="selectedDate" class="text-center text-muted">
+      No preferences submitted for this date.
+    </p>
+
+    <!-- Form -->
+    <div class="preference-form mt-4">
+      <div class="card shadow">
+        <div class="card-header bg-black text-white fw-bold">
+          {{ isEditing ? 'Edit' : 'Create' }} Preference
+        </div>
+        <div class="card-body">
+          <form @submit.prevent="savePreference">
+            <div class="mb-3">
+              <label for="employeeName" class="form-label">Employee:</label>
+              <input type="text" v-model="preferenceForm.employeeName" required class="form-control shadow-sm" />
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="startTime" class="form-label">Start Time:</label>
+                <input type="time" v-model="preferenceForm.startTime" required class="form-control shadow-sm" />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="endTime" class="form-label">End Time:</label>
+                <input type="time" v-model="preferenceForm.endTime" required class="form-control shadow-sm" />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn bg-gold shadow-sm bigger-button">
+                <i class="fas fa-save"></i> {{ isEditing ? 'Save Changes' : 'Create Preference' }}
+              </button>
+              <button type="button" @click="cancelEdit" class="btn btn-outline-dark shadow-sm bigger-button">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Confirmations -->
+    <div class="mt-4 text-center">
+      <button @click="submitConfirmations" :disabled="!selectedDate" class="btn btn-success shadow-sm bigger-button me-2">
+        <i class="fas fa-check"></i> Submit
+      </button>
+      <button @click="manageUsers" class="btn btn-outline-success shadow-sm bigger-button">
+        <i class="fas fa-users"></i> Manage Users
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -234,9 +259,12 @@ export default {
 
 <style>
 .employee-preferences-manager {
-    max-width: 800px;
     margin: 0 auto;
     text-align: center;
+}
+
+.card.shadow {
+  width: 100%;
 }
 
 table {
@@ -261,11 +289,31 @@ button {
     padding: 5px 10px;
     font-size: 14px;
     cursor: pointer;
+    width: 110px;
 }
 
 button.confirmed {
     background-color: #4caf50;
     color: white;
+}
+
+.bigger-button {
+  width: 180px;
+}
+
+.bg-black {
+  background: #212529;
+  color: #fff;
+}
+
+.bg-gold {
+  background: #776212;
+  color: #fff;
+}
+
+.bg-gold:hover {
+  background-color: #493c0c;
+  color: white;
 }
 
 .preference-form {

@@ -2,31 +2,97 @@
   <div class="manage-users-page container mt-4">
     <h2 class="text-center mb-4">Manage Users</h2>
 
+    <!-- Search and Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <input
+        type="text"
+        class="form-control w-50"
+        placeholder="Search by Name, Last Name or Role..."
+        v-model="searchQuery"
+      />
+      <button class="btn btn-success" @click="refreshUsers">
+        Refresh Users
+      </button>
+    </div>
+
     <!-- User List Table -->
-    <div v-if="users.length > 0">
+    <div v-if="filteredUsers.length > 0">
       <h3 class="mb-3">Users List</h3>
-      <table class="table table-bordered table-striped">
+      <table class="table table-hover table-bordered">
         <thead class="table-dark">
         <tr>
-          <th>Name</th>
-          <th>Last Name</th>
+          <th @click="sortUsers('name')" style="cursor: pointer">
+            Name <i class="fa" :class="sortColumn === 'name' ? sortIcon : ''"></i>
+          </th>
+          <th @click="sortUsers('lastname')" style="cursor: pointer">
+            Last Name <i class="fa" :class="sortColumn === 'lastname' ? sortIcon : ''"></i>
+          </th>
           <th>Role</th>
           <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in paginatedUsers" :key="user.id">
           <td>{{ user.name }}</td>
           <td>{{ user.lastname }}</td>
-          <td>{{ user.role }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
-              Delete
+              <span
+                class="badge"
+                :class="{
+                  'bg-primary': user.role === 'Admin',
+                  'bg-success': user.role === 'SuperAdmin',
+                  'bg-secondary': user.role === 'Worker',
+                }"
+              >
+                {{ user.role }}
+              </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm me-2"
+              @click="deleteUser(user.id)"
+            >
+              <i class="fa fa-trash"></i> Delete
+            </button>
+            <button
+              class="btn btn-warning btn-sm"
+              @click="editUser(user)"
+            >
+              <i class="fa fa-edit"></i> Edit
             </button>
           </td>
         </tr>
         </tbody>
       </table>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li
+            class="page-item"
+            :class="{ disabled: currentPage === 1 }"
+            @click="prevPage"
+          >
+            <a class="page-link">Previous</a>
+          </li>
+          <li
+            class="page-item"
+            v-for="page in totalPages"
+            :key="page"
+            :class="{ active: currentPage === page }"
+            @click="goToPage(page)"
+          >
+            <a class="page-link">{{ page }}</a>
+          </li>
+          <li
+            class="page-item"
+            :class="{ disabled: currentPage === totalPages }"
+            @click="nextPage"
+          >
+            <a class="page-link">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <p v-else class="text-center">No users found.</p>
@@ -57,7 +123,7 @@ export default {
               { id: 'f7bb9991-f4d0-4c61-a365-66698621259e', name: 'Nikola', lastname: 'Kopernik', role: 'Worker' },
               { id: 'f7bb9991-f4d0-4c61-a365-66698621260e', name: 'Johann', lastname: 'Schlechtenberg', role: 'Worker' },
               { id: 'f7bb9991-f4d0-4c61-a365-66698621261e', name: 'Julian', lastname: 'Cezar', role: 'Worker' },
-              { id: 'f7bb9991-f4d0-4c61-a365-66698621262e', name: 'Albert', lastname: 'Einkamień', role: 'Worker' },
+              { id: 'f7bb9991-f4d0-4c61-a365-66698621262e', name: 'Albert', lastname: 'Steinein', role: 'Worker' },
               { id: 'f7bb9991-f4d0-4c61-a365-66698621263e', name: 'Grota', lastname: 'Thunberg', role: 'Worker' },
 
             ], // Will store the list of users fetched from the API
@@ -112,6 +178,7 @@ export default {
 
         deleteUser(userId) {
           // Find the user to be deleted and remove it from the list
+          console.log(userId);
           this.users = this.users.filter(user => user.id !== userId);
         },
 
@@ -169,7 +236,7 @@ export default {
 
 <style scoped>
 .manage-users-page {
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
 }
 

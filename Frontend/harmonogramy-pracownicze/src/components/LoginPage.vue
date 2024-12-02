@@ -1,32 +1,45 @@
 <template>
-  <div class="login-page container mt-5">
-    <h2 class="text-center mb-4">Login</h2>
+  <div class="login-page container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4">
+      <h2 class="text-center mb-4 custom-header">Welcome Back</h2>
+      <p class="text-center text-muted mb-4">Log in to your account</p>
 
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input
-        type="email"
-        id="email"
-        v-model="email"
-        placeholder="Enter your email"
-        class="form-control"
-      />
-    </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <div class="input-group">
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            placeholder="Enter your email"
+            class="form-control"
+          />
+        </div>
+      </div>
 
-    <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
-      <input
-        type="password"
-        id="password"
-        v-model="password"
-        placeholder="Enter your password"
-        class="form-control"
-      />
-    </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            placeholder="Enter your password"
+            class="form-control"
+          />
+        </div>
+      </div>
 
+      <div class="d-flex align-items-center mb-3">
+        <div>
+          <input class="marr-05" type="checkbox" id="rememberMe" />
+          <label for="rememberMe" class="form-check-label">Remember me</label>
+        </div>
+      </div>
 
-    <div class="text-center">
-      <button @click="handleSubmit" class="btn btn-primary">Submit</button>
+      <div class="text-center">
+        <button @click="handleSubmit" class="register-button btn btn-primary w-100">Login</button>
+      </div>
     </div>
   </div>
 </template>
@@ -126,27 +139,10 @@ export default {
 
 <style>
 .login-page {
-  max-width: 300px;
-  margin: 0 auto;
-  text-align: left;
+  max-width: 700px;
 }
 
-label {
-  display: block;
-  margin: 10px 0;
-  cursor: pointer;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+.marr-05 {
+  margin-right: 0.5em;
 }
 </style>
