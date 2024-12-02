@@ -1,101 +1,35 @@
 <template>
   <div class="manage-users-page container mt-4">
-    <h2 class="text-center mb-4">Manage Users</h2>
+    <div class="card shadow-lg p-4">
+      <h2 class="text-center mb-4 custom-header">Manage Users</h2>
 
-    <!-- Search and Filter -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <input
-        type="text"
-        class="form-control w-50"
-        placeholder="Search by Name, Last Name or Role..."
-        v-model="searchQuery"
-      />
-      <button class="btn btn-success" @click="refreshUsers">
-        Refresh Users
-      </button>
+      <!-- User List Table -->
+      <div v-if="users.length > 0">
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.name }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <p v-else class="text-center">No users found.</p>
     </div>
-
-    <!-- User List Table -->
-    <div v-if="filteredUsers.length > 0">
-      <h3 class="mb-3">Users List</h3>
-      <table class="table table-hover table-bordered">
-        <thead class="table-dark">
-        <tr>
-          <th @click="sortUsers('name')" style="cursor: pointer">
-            Name <i class="fa" :class="sortColumn === 'name' ? sortIcon : ''"></i>
-          </th>
-          <th @click="sortUsers('lastname')" style="cursor: pointer">
-            Last Name <i class="fa" :class="sortColumn === 'lastname' ? sortIcon : ''"></i>
-          </th>
-          <th>Role</th>
-          <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="user in paginatedUsers" :key="user.id">
-          <td>{{ user.name }}</td>
-          <td>{{ user.lastname }}</td>
-          <td>
-              <span
-                class="badge"
-                :class="{
-                  'bg-primary': user.role === 'Admin',
-                  'bg-success': user.role === 'SuperAdmin',
-                  'bg-secondary': user.role === 'Worker',
-                }"
-              >
-                {{ user.role }}
-              </span>
-          </td>
-          <td>
-            <button
-              class="btn btn-danger btn-sm me-2"
-              @click="deleteUser(user.id)"
-            >
-              <i class="fa fa-trash"></i> Delete
-            </button>
-            <button
-              class="btn btn-warning btn-sm"
-              @click="editUser(user)"
-            >
-              <i class="fa fa-edit"></i> Edit
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-
-      <!-- Pagination -->
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-          <li
-            class="page-item"
-            :class="{ disabled: currentPage === 1 }"
-            @click="prevPage"
-          >
-            <a class="page-link">Previous</a>
-          </li>
-          <li
-            class="page-item"
-            v-for="page in totalPages"
-            :key="page"
-            :class="{ active: currentPage === page }"
-            @click="goToPage(page)"
-          >
-            <a class="page-link">{{ page }}</a>
-          </li>
-          <li
-            class="page-item"
-            :class="{ disabled: currentPage === totalPages }"
-            @click="nextPage"
-          >
-            <a class="page-link">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-
-    <p v-else class="text-center">No users found.</p>
   </div>
 </template>
 
@@ -238,6 +172,10 @@ export default {
 .manage-users-page {
     max-width: 850px;
     margin: 0 auto;
+}
+
+.card {
+  width: 100%;
 }
 
 .table th, .table td {
